@@ -1,6 +1,9 @@
 // App.jsx
 import React, { useState } from 'react';
-import { BrowserRouter as Router, Routes, Route, Link, useParams, useNavigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import Home from './Home';
+import Admin from './Admin';
+import ProductDetail from './ProductDetail';
 
 const productsData = [
   { id: 1, name: 'iPhone 14', description: 'Apple iPhone 14 with A15 Bionic chip', price: '$999' },
@@ -25,74 +28,6 @@ function App() {
         />
       </Routes>
     </Router>
-  );
-}
-
-function Home({ products }) {
-  return (
-    <div>
-      <h1>Mobile Store</h1>
-      <ul>
-        {products.map((product) => (
-          <li key={product.id}>
-            <Link to={`/products/${product.id}`}>{product.name}</Link>
-          </li>
-        ))}
-      </ul>
-    </div>
-  );
-}
-
-function ProductDetail({ products }) {
-  const { id } = useParams();
-  const product = products.find((p) => p.id === parseInt(id));
-
-  if (!product) {
-    return <h2>Product not found</h2>;
-  }
-
-  return (
-    <div>
-      <h2>{product.name}</h2>
-      <p>{product.description}</p>
-      <p>{product.price}</p>
-      <Link to="/">Back to Home</Link>
-    </div>
-  );
-}
-
-function Admin({ products, setProducts }) {
-  const navigate = useNavigate();
-
-  const handleDelete = (id) => {
-    setProducts(products.filter((product) => product.id !== id));
-  };
-
-  const handleEdit = (id) => {
-    const newName = prompt('Enter new product name:');
-    if (newName) {
-      setProducts(
-        products.map((product) =>
-          product.id === id ? { ...product, name: newName } : product
-        )
-      );
-    }
-  };
-
-  return (
-    <div>
-      <h1>Admin Panel</h1>
-      <ul>
-        {products.map((product) => (
-          <li key={product.id}>
-            {product.name} - {product.price}
-            <button onClick={() => handleEdit(product.id)}>Edit</button>
-            <button onClick={() => handleDelete(product.id)}>Delete</button>
-          </li>
-        ))}
-      </ul>
-      <button onClick={() => navigate('/')}>Back to Home</button>
-    </div>
   );
 }
 
